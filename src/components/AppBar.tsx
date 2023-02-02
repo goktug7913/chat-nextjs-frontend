@@ -19,8 +19,8 @@ const RightArrow = () => {
 
 export default function AppBar() {
     const [expanded, setExpanded] = useState(false);
-    const rootRef = React.useRef<HTMLDivElement>();
-    const expandRef = React.useRef<HTMLDivElement>();
+    const rootRef = React.useRef<HTMLDivElement>(null);
+    const expandRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (!rootRef.current) return;
