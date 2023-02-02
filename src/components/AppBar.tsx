@@ -23,6 +23,7 @@ export default function AppBar() {
     const expandRef = React.useRef<HTMLDivElement>();
 
     useEffect(() => {
+        if (!rootRef.current) return;
         if (expanded) {
             rootRef.current.style.height = "13.5rem";
             rootRef.current.classList.add("rounded-b-2xl");
