@@ -7,7 +7,11 @@ module.exports = {
     extend: {
       spacing: {
         accent: "0.25rem",
-      }
+      },
+      transitionProperty: {
+        'width': 'width',
+        'height': 'height',
+      },
     },
   },
   plugins: [],
