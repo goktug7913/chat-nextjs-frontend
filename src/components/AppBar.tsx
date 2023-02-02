@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 const DownArrow = () => {
     return (
@@ -19,9 +19,36 @@ const RightArrow = () => {
 
 export default function AppBar() {
     const [expanded, setExpanded] = useState(false);
+    const rootRef = React.useRef<HTMLDivElement>();
+    const expandRef = React.useRef<HTMLDivElement>();
+
+    useEffect(() => {
+        if (expanded) {
+            rootRef.current.style.height = "13.5rem";
+
+        } else {
+            rootRef.current.style.height = "3.5rem";
+
+        }
+    }, [expanded]);
+
+    const handleTransitionEnd = () => {
+        if (expanded) {
+            expandRef.current.style.opacity = "1";
+        } else {
+            expandRef.current.style.opacity = "0";
+        }
+    }
+
+    useEffect(() => {
+        rootRef.current.addEventListener("transitionstart", handleTransitionEnd);
+        return () => {
+            rootRef.current.removeEventListener("transitionstart", handleTransitionEnd);
+        }
+    } , [expanded]);
 
     return (
-        <div className={`flex flex-grow flex-col bg-gradient-to-r from-purple-600 to-pink-600 pb-accent mb-4 ${expanded ? " rounded-xl" : ""}`}>
+        <div className={`flex flex-grow flex-col bg-gradient-to-r from-purple-600 to-pink-600 pb-accent mb-4 transition-height duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
             <div className="bg-indigo-700 h-full px-4 py-2.5 flex flex-row grow ">
                 <button className={"bg-purple-600 rounded-md px-1 py-1 mr-2"} onClick={() => setExpanded(prevState => !prevState)}>
                     {expanded ? <DownArrow /> : <RightArrow />}
@@ -37,8 +64,7 @@ export default function AppBar() {
                 <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>
             </div>
 
-            {expanded && <div className="px-4 py-2.5 text-white">
-                Menu stuff...
+            <div className={`px-4 py-2.5 text-white transition-all duration-500 ease-in-out`} ref={expandRef}>
                 {
                     // A loop to fill placeholder menu items
                     Array.from(Array(6).keys()).map((i) => {
@@ -47,7 +73,7 @@ export default function AppBar() {
                          )
                     })
                 }
-            </div>}
+            </div>
         </div>
     )
 }
