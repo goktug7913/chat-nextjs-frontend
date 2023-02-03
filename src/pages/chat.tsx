@@ -39,7 +39,7 @@ export default function Chat() {
         return () => {
             socket.off("msg_tx");
         }
-    }, [messages]);
+    }, [messages, socket]);
 
     useEffect(() => {
         // Scroll to bottom on new message

@@ -22,7 +22,7 @@ export default function Home() {
               </div>
               <div className="mx-6 py-6">
                   <p className="text-xl text-center text-white">Chatter is a powerful communication app that lets you
-                      chat with friends, family, and colleagues in private or in groups. Whether you're at work, at
+                      chat with friends, family, and colleagues in private or in groups. Whether you&apos;re at work, at
                       home, or on the go, Chatter makes it easy to stay connected with the people who matter most.</p>
                   <div className="mt-10">
                       <h2 className="text-lg font-bold text-white">Features</h2>

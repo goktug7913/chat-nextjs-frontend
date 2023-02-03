@@ -34,7 +34,7 @@ export default function AppBar() {
         }
     }, [expanded]);
 
-    const handleTransitionEnd = () => {
+     function handleTransitionEnd() {
         if (!expandRef.current) return;
         if (expanded) {
             expandRef.current.style.opacity = "1";
@@ -46,9 +46,10 @@ export default function AppBar() {
     useEffect(() => {
         if (!rootRef.current) return;
         rootRef.current.addEventListener("transitionstart", handleTransitionEnd);
+        const cleanupRef = rootRef.current;
         return () => {
-            if (!rootRef.current) return;
-            rootRef.current.removeEventListener("transitionstart", handleTransitionEnd);
+            if (!cleanupRef) return;
+            cleanupRef.removeEventListener("transitionstart", handleTransitionEnd);
         }
     } , [expanded]);
 

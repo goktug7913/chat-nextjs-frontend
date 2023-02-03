@@ -9,7 +9,6 @@ export default function Document() {
               content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
           />
           <meta charSet={"utf-8"} />
-          <title>Chatter</title>
           <meta name="description" content="Instant community messaging." />
           <meta name="keywords" content="chat, messaging, community, instant, free" />
           <meta name="author" content="Chatter" />
