@@ -18,7 +18,7 @@ export default function MessageItem({message}: MessageItemProps) {
     }, [message.date]);
 
     return (
-        <div className={`flex flex-col rounded-md p-2 m-2 w-64${message.isSelf ? " bg-violet-600" : " bg-violet-400"}`}>
+        <div className={`text-white flex flex-col rounded-md p-2 m-2 w-64${message.isSelf ? " bg-violet-600" : " bg-violet-800"}`}>
             <div className="flex flex-row items-center justify-between">
                 <h6 className="text-sm font-bold">{message.sender}</h6>
                 <span className="text-xs ml-2">{formattedDate}</span>

@@ -7,7 +7,7 @@ interface Props {
     messageList: Message[];
 }
 export default function ChatInputMenu( {setter, messageList}: Props ) {
-    const [message, setMessage] = useState("Test message for layout.");
+    const [message, setMessage] = useState("");
     const socket = useSocket();
     const [debugNick, setDebugNick] = useState("John Doe");
 
