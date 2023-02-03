@@ -1,7 +1,6 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Analytics } from '@vercel/analytics/react';
-import AppBar from "@/components/AppBar";
 import {UserProvider} from "@/context/userContext";
 import {SocketProvider} from "@/context/socketContext";
 import {useEffect} from "react";
@@ -12,7 +11,11 @@ export default function App({ Component, pageProps }: AppProps) {
         // Load service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.register('/sw.js').then(
+                    (registration) => {
+                        console.log('SW registered: ', registration);
+                    }
+                )
             });
         } else {
             console.log("Service worker not supported");

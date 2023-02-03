@@ -15,7 +15,7 @@ export default function Document() {
           <meta name="author" content="Chatter" />
           <meta name="theme-color" content="#ffffff" />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+          <link rel="apple-touch-icon" href="/next.svg" />
           <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <body>

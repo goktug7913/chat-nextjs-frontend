@@ -1,9 +1,15 @@
 import MessageItem from "@/components/MessageItem";
 import ChatInputMenu from "@/components/ChatInputMenu";
 import {useSocket} from "@/context/socketContext";
-import {ReactElement, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Message from "@/types/Message";
 import AppBar from "@/components/AppBar";
+
+const DevSvg = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 ml-2 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+    </svg>
+);
 
 export default function Chat() {
     const [messages, setMessages] = useState([] as Message[]);
@@ -44,6 +50,10 @@ export default function Chat() {
         <>
         <div className="flex flex-col grow shrink max-h-full" id="chat-wrapper">
             <AppBar />
+            <div className={"text-white m-0 p-1 items-center flex flex-row"}>
+                <DevSvg />
+                <h1 className="text-2xl font-bold ml-2">Development Room</h1>
+            </div>
             <div className="overflow-y-scroll" ref={msgListDiv}>
                 {messages.map((message) => (
                     <MessageItem key={message.date} message={message} />

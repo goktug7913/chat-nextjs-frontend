@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
       <main>
           <AppBar />
-          <div className="flex flex-col items-start px-3 py-2">
+          <div className="flex flex-col items-start mx-40 py-8">
               <div className="self-center max-w-md rounded-xl bg-violet-800 shadow-2xl p-3">
                 <h1 className="text-4xl text-center font-bold text-white bg-clip-text">The Ultimate Communication App</h1>
               </div>
