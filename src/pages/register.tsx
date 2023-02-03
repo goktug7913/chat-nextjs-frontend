@@ -1,6 +1,7 @@
 import {UserContext} from "@/context/userContext";
 import {useContext, useState} from "react";
 import axiosInstance from "@/api/axiosInstance";
+import AppBar from "@/components/AppBar";
 
 export default function Register() {
     const { user, setUser } = useContext(UserContext);
@@ -53,6 +54,8 @@ export default function Register() {
     }
 
     return (
+        <>
+        <AppBar />
         <div className={"flex flex-col items-center justify-center"}>
             <div className={"flex flex-col items-center justify-center bg-white rounded-md shadow-md p-4"}>
                 <h1 className={"text-2xl font-bold"}>Chatter Register</h1>
@@ -77,5 +80,6 @@ export default function Register() {
                 </form>
             </div>
         </div>
+        </>
     )
 }

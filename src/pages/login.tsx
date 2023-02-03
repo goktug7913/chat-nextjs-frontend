@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React, {useState} from "react";
 import axiosInstance from "@/api/axiosInstance";
+import AppBar from "@/components/AppBar";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export default function Login() {
                 <title>Login</title>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-
+            <AppBar />
             <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center w-full max-w-md p-4 mt-4 bg-white rounded-lg shadow-md">
                     <h6 className="text-2xl font-bold">Chatter Login</h6>
