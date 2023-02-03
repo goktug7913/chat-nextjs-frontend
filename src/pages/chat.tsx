@@ -1,66 +1,32 @@
 import MessageItem from "@/components/MessageItem";
 import ChatInputMenu from "@/components/ChatInputMenu";
-
-const MockMessages = [
-    {
-        id: 1,
-        content: "Hello World!",
-        createdAt: "2021-03-21T15:00:00.000Z",
-        updatedAt: "2021-03-21T15:00:00.000Z",
-        user: "John Doe",
-        isMine: true,
-    },
-    {
-        id: 2,
-        content: "Hello World!",
-        createdAt: "2021-03-21T15:00:00.000Z",
-        updatedAt: "2021-03-21T15:00:00.000Z",
-        user: "Jane Doe",
-    },
-    {
-        id: 3,
-        content: "Hello World!",
-        createdAt: "2021-03-21T15:00:00.000Z",
-        updatedAt: "2021-03-21T15:00:00.000Z",
-        user: "John Doe",
-        isMine: true,
-    },
-    {
-        id: 4,
-        content: "Hello World!",
-        createdAt: "2021-03-21T15:00:00.000Z",
-        updatedAt: "2021-03-21T15:00:00.000Z",
-        user: "Jane Doe",
-    },
-    {
-        id: 5,
-        content: "Hello World!",
-        createdAt: "2021-03-21T15:00:00.000Z",
-        updatedAt: "2021-03-21T15:00:00.000Z",
-        user: "John Doe",
-        isMine: true,
-    },
-    {
-        id: 6,
-        content: "Hello World!",
-        createdAt: "2021-03-21T15:00:00.000Z",
-        updatedAt: "2021-03-21T15:00:00.000Z",
-        user: "Jane Doe",
-    }
-];
-
+import {useSocket} from "@/context/socketContext";
+import {useEffect, useState} from "react";
+import Message from "@/types/Message";
 
 export default function Chat() {
+    const [messages, setMessages] = useState([] as Message[]);
+    const socket = useSocket();
+
+    const InputMenuCallback = (data: Message) => {
+        setMessages([...messages, data]);
+    }
+
+    useEffect(() => {
+        socket.on("msg_tx", (data: Message) => {
+            setMessages([...messages, data]);
+        });
+    }, [messages]);
 
     return (
-        <div style={{width: "100vw", height:"100%", minHeight:"100%", boxSizing:"border-box", overflow:"hidden"}}>
-            <div className="flex-1 overflow-y-auto">
-                {MockMessages.map((message) => (
-                    <MessageItem key={message.id} message={message} />
+        <div className="flex flex-col grow">
+            <div className="flex flex-col overflow-y-auto grow">
+                {messages.map((message) => (
+                    <MessageItem key={message.date} message={message} />
                 ))}
             </div>
             <div className="flex flex-row justify-between w-full h-12 self-end">
-                <ChatInputMenu />
+                <ChatInputMenu setter={InputMenuCallback} messageList={messages}/>
             </div>
         </div>
     )

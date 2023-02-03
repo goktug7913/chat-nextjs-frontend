@@ -1,13 +1,5 @@
 import {useEffect, useState} from "react";
-
-interface Message {
-    id: number;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-    user: string;
-    isMine?: boolean;
-}
+import Message from "@/types/Message";
 
 interface MessageItemProps {
     message: Message;
@@ -18,20 +10,20 @@ export default function MessageItem({message}: MessageItemProps) {
 
     useEffect(() => {
         // Format date to "HH:mm" if it's today, otherwise add "dd/MM/yyyy" as well
-        const date = new Date(message.createdAt);
+        const date = new Date(message.date);
         const today = new Date();
         const isToday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
         const formattedDate = isToday ? date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : date.toLocaleDateString([], {day: '2-digit', month: '2-digit', year: 'numeric'}) + " " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         setFormattedDate(formattedDate);
-    }, [message.createdAt]);
+    }, [message.date]);
 
     return (
-        <div className={`flex flex-col rounded-md p-2 m-2 w-64${message.isMine ? " bg-violet-600" : " bg-violet-400"}`}>
-            <div className="flex flex-row items-center">
-                <h6 className="text-sm font-bold">{message.user}</h6>
+        <div className={`flex flex-col rounded-md p-2 m-2 w-64${message.isSelf ? " bg-violet-600" : " bg-violet-400"}`}>
+            <div className="flex flex-row items-center justify-between">
+                <h6 className="text-sm font-bold">{message.sender}</h6>
                 <span className="text-xs ml-2">{formattedDate}</span>
             </div>
-            <p className="text-sm">{message.content}</p>
+            <p className="text-sm">{message.message}</p>
         </div>
     )
 }
