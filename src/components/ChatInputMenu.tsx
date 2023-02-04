@@ -9,7 +9,7 @@ interface Props {
 export default function ChatInputMenu( {setter, messageList}: Props ) {
     const [message, setMessage] = useState("");
     const socket = useSocket();
-    const [debugNick, setDebugNick] = useState("John Doe");
+    const [debugNick, setDebugNick] = useState(`User ${Math.floor(Math.random() * 1000)}`);
 
     const HandleSubmit = (e: any) => {
         e.preventDefault();
