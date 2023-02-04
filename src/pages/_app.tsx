@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <UserProvider>
           <SocketProvider>
               <Analytics />
-              <div className="bg-gradient-to-tr from-violet-800 to-purple-400 h-screen flex flex-col max-h-screen overflow-y-hidden">
+              <div className="bg-gradient-to-tr from-violet-800 to-purple-400 h-screen flex flex-col max-h-screen overflow-y-scroll">
                 <Component {...pageProps} />
               </div>
           </SocketProvider>

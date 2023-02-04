@@ -1,7 +1,9 @@
 import axios from 'axios';
+const deployUrl = "https://chatsv.goktug.xyz/api";
+const devUrl = "http://localhost:3001/api";
 
 const axiosInstance = axios.create({
-    baseURL: 'https://chatsv.goktug.xyz/api',
+    baseURL: deployUrl,
     headers: {
         'Content-Type': 'application/json',
     },

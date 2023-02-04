@@ -14,7 +14,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className={""}>
           <AppBar />
           <div className="flex flex-col items-start mx-5 py-8">
               <div className="self-center max-w-md rounded-xl bg-violet-800 shadow-2xl p-3">
