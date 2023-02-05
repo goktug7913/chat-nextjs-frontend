@@ -3,7 +3,7 @@ const deployUrl = "https://chatsv.goktug.xyz/api";
 const devUrl = "http://localhost:3001/api";
 
 const axiosInstance = axios.create({
-    baseURL: deployUrl,
+    baseURL: process.env.NODE_ENV === "production" ? deployUrl : devUrl,
     headers: {
         'Content-Type': 'application/json',
     },

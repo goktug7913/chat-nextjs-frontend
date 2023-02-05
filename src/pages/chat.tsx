@@ -29,11 +29,16 @@ export default function Chat() {
             behavior: "smooth"
         });
     }
-    useEffect(scrollToBottom, []);
+    useEffect(scrollToBottom, [messages]);
 
     useEffect(() => {
         socket.on("msg_tx", (data: Message) => {
             setMessages([...messages, {...data, isSelf: false}]);
+        });
+
+        socket.on("msg_fetch", (data: Message[]) => {
+            console.log("msg_fetch", data);
+            setMessages(data);
         });
 
         return () => {
