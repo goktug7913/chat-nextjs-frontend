@@ -30,8 +30,8 @@ export default function Login() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <AppBar />
-            <div className="flex flex-col items-center justify-center">
-                <div className="flex flex-col items-center justify-center w-full max-w-md p-4 mt-4 bg-white rounded-lg shadow-md">
+            <div className="grid h-screen place-items-center">
+                <div className="flex flex-col items-center justify-center w-full max-w-sm p-4 m-3 bg-white rounded-lg shadow-md">
                     <h6 className="text-2xl font-bold">Chatter Login</h6>
 
                     <form className="flex flex-col w-full" onSubmit={handleSubmit}>

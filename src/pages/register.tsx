@@ -6,6 +6,7 @@ import AppBar from "@/components/AppBar";
 export default function Register() {
     const { user, setUser } = useContext(UserContext);
 
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -39,16 +40,18 @@ export default function Register() {
 
         try {
             const response = await axiosInstance.post("/auth/register", {
+                username,
                 email,
                 password,
                 passwordConfirm,
                 nickname,
             });
+            // If the user is successfully registered, we can set the user context from the response
             setUser(response.data);
             localStorage.setItem("user", JSON.stringify(response.data));
             setLoading(false);
         } catch (err: any) {
-            setError(err.response.data.message);
+            err.response.data ? setError(err.response.data.message) : setError("An unknown error occurred 😕");
             setLoading(false);
         }
     }
@@ -56,10 +59,11 @@ export default function Register() {
     return (
         <>
         <AppBar />
-        <div className={"flex flex-col items-center justify-center"}>
-            <div className={"flex flex-col items-center justify-center bg-white rounded-md shadow-md p-4"}>
+        <div className={"grid h-screen place-items-center"}>
+            <div className={"flex flex-col items-center justify-center align-middle bg-white rounded-md shadow-2xl m-3 p-4"}>
                 <h1 className={"text-2xl font-bold"}>Chatter Register</h1>
                 <form className={"flex flex-col w-full justify-center"} onSubmit={handleSubmit}>
+                    <input className={"border-2 border-gray-300 rounded-md p-2 my-2"} type="text" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
                     <input className={"border-2 border-gray-300 rounded-md p-2 my-2"} type="text" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
                     <input className={"border-2 border-gray-300 rounded-md p-2 my-2"} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
                     <input className={"border-2 border-gray-300 rounded-md p-2 my-2"} type="password" placeholder="Confirm Password" onChange={e => setPasswordConfirm(e.target.value)}/>
