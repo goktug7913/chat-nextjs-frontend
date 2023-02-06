@@ -1,13 +1,14 @@
 import Head from "next/head";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import axiosInstance from "@/api/axiosInstance";
 import AppBar from "@/components/AppBar";
+import {UserContext} from "@/context/userContext";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
-
+    const setUser = useContext(UserContext).setUser;
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -18,6 +19,8 @@ export default function Login() {
         }
         ).then((response) => {
             console.log(response);
+            localStorage.setItem("user", JSON.stringify(response.data));
+            setUser(response.data);
         }).catch((error) => {
             console.log(error);
         });

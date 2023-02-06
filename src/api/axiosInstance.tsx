@@ -20,10 +20,12 @@ axiosInstance.interceptors.request.use(
             config.headers.Authorization = `Bearer ${user.token}`;
         } else {
             // Check if the user is trying to login
-            if (config.url === '/auth/login') {
-                // We don't need to add the token to the header as the user is trying to login
+            if (config.url === '/auth/login' || config.url === '/auth/register') {
+                // We don't need to add the token to the header as the user is trying to login or register
             } else {
-                // TODO: Redirect to login page
+                console.log("User is not logged in");
+                // Redirect the user to login page with NEXT router
+                window.location.href = '/login';
             }
         }
 

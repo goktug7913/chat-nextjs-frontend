@@ -8,11 +8,24 @@ interface Room {
     joinedUsernames?: string[];
 }
 export interface User {
-    id: number;
-    email: string;
-    nickname: string;
+    _id: string;
     token: string;
-    joinedRooms: Room[];
+    tokenRefresh: string;
+    username: string,
+    password?: string | null, // password is optional as it is not returned in a response
+    email: string,
+    registerDate?: Date,
+    lastLogin?: Date,
+    rooms?: string[],
+    messages?: string[],
+    friends?: string[],
+    friendRequests?: string[],
+    friendRequestsSent?: string[],
+    blockedUsers?: string[],
+    blockedBy?: string[],
+    online?: boolean,
+    socketId?: string,
+    profilePicture?: string,
 }
 
 interface UserContext {
@@ -43,7 +56,7 @@ const reducer = (state: UserContext, action: {type: string; payload: User}) => {
                 ...state,
                 user: {
                     ...state.user,
-                    nickname: action.payload.nickname,
+                    nickname: action.payload.username,
                 }
             };
         case UserActionType.SET_TOKEN:
