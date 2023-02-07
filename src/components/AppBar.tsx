@@ -25,8 +25,6 @@ export default function AppBar() {
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
 
-    console.log("user", user);
-
     useEffect(() => {
         if (!rootRef.current) return;
         if (expanded) {

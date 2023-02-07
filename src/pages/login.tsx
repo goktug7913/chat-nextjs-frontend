@@ -47,17 +47,17 @@ export default function Login() {
 
                     <form className="flex flex-col w-full" onSubmit={handleSubmit}>
                         <label htmlFor="email" className="text-sm font-medium text-gray-500">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Email"
+                        <input type="email" id="email" name="email" placeholder="Email" value={email}
                                onChange={(e) => setEmail(e.target.value)}
                                  className="px-4 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"/>
 
                         <label htmlFor="password" className="text-sm font-medium text-gray-500">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Password"
+                        <input type="password" id="password" name="password" placeholder="Password" value={password}
                                onChange={(e) => setPassword(e.target.value)}
                                     className="px-4 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"/>
 
                         <div className="flex items-center justify-left items-baseline mt-4">
-                            <input type="checkbox" id="remember" name="remember" className="mt-2 mr-1" onChange={(e) =>setRememberMe(prevState => !prevState)}/>
+                            <input type="checkbox" id="remember" name="remember" className="mt-2 mr-1" checked={rememberMe} onChange={(e) =>setRememberMe(prevState => !prevState)}/>
                             <label htmlFor="remember" className="text-sm font-medium text-gray-500">Remember me</label>
                         </div>
 
