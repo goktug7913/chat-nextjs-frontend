@@ -61,7 +61,7 @@ export default function Chat() {
             </div>
             <div className="overflow-y-scroll" ref={msgListDiv}>
                 {messages.map((message) => (
-                    <MessageItem key={message.date} message={message} />
+                    <MessageItem key={message.date.toLocaleString()} message={message} />
                 ))}
             </div>
             <div className="flex grow shrink"></div>
