@@ -1,11 +1,11 @@
 import {useContext, useState} from "react";
 import {useSocket} from "@/context/socketContext";
-import Message from "@/types/Message";
+import IMessage from "@/types/IMessage";
 import {UserContext} from "@/context/userContext";
 
 interface Props {
-    setter: (data: Message) => void;
-    messageList: Message[];
+    setter: (data: IMessage) => void;
+    messageList: IMessage[];
 }
 export default function ChatInputMenu( {setter, messageList}: Props ) {
     const [message, setMessage] = useState("");
@@ -23,6 +23,7 @@ export default function ChatInputMenu( {setter, messageList}: Props ) {
             message: message,
             date: new Date().toISOString(),
             isSelf: false,
+            room: "test",
         };
 
         socket.emit("msg_rx", data);

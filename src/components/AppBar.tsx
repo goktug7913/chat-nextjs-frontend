@@ -1,5 +1,6 @@
 import Link from "next/link";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import {UserContext} from "@/context/userContext";
 
 const DownArrow = () => {
     return (
@@ -21,6 +22,10 @@ export default function AppBar() {
     const [expanded, setExpanded] = useState(false);
     const rootRef = React.useRef<HTMLDivElement>(null);
     const expandRef = React.useRef<HTMLDivElement>(null);
+    const userCtx = useContext(UserContext);
+    const user = userCtx.user;
+
+    console.log("user", user);
 
     useEffect(() => {
         if (!rootRef.current) return;
@@ -53,9 +58,13 @@ export default function AppBar() {
         }
     } , [expanded]);
 
+     const HandleLogout = () => {
+        userCtx.setUser({} as any);
+     }
+
     return (
-        <div className={`flex flex-col min-h-fit shrink-0 bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-1 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
-            <div className="bg-indigo-700 h-full px-4 py-2.5 flex flex-row grow ">
+        <div className={`flex flex-col shrink bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-1 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
+            <div className="bg-indigo-700 px-4 py-2.5 flex flex-row">
                 <button className={"bg-purple-600 rounded-md px-1 py-1 mr-2"} onClick={() => setExpanded(prevState => !prevState)}>
                     {expanded ? <DownArrow /> : <RightArrow />}
                 </button>
@@ -66,19 +75,45 @@ export default function AppBar() {
 
                 <div className={"flex-grow"} />
 
-                <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>
-                <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>
+                {user.token ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>}
+                {user.token ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}
+
+                {user.token ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/profile">Profile</Link></button> : <></>}
+                {user.token ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"} onClick={HandleLogout}>Logout</button> : <></>}
             </div>
 
-            <div className={`px-4 py-2.5 text-white transition-all duration-500 ease-in-out`} ref={expandRef}>
-                {
-                    // A loop to fill placeholder menu items
-                    Array.from(Array(6).keys()).map((i) => {
-                         return (
-                             <p key={i}>Menu Item {i}</p>
-                         )
-                    })
-                }
+            <div className={`flex grow px-1 py-2 text-white transition-all duration-500 ease-in-out`} ref={expandRef}>
+                <div className={"grid grid-cols-3 grid-rows-1"}>
+                    <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
+                        <p className={"font-bold text-lg"}>Discover</p>
+                        <p className={"text-sm"}>Discover new channels and friends</p>
+                    </div>
+
+                    {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
+                        <div className="flex flex-row">
+                            <p className={"font-bold text-lg"}>Rooms</p>
+                            <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}>+</button>
+                        </div>
+                        <ul>
+                            {user.rooms?.length === 0 && <li>No rooms</li>}
+                            {user.rooms?.map((room) => (
+                                // We need to fetch room data from the server from the room id
+                                <li key={room}>{room}</li>
+                            ))}
+                        </ul>
+                    </div>}
+
+                    {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
+                        <p className={"font-bold text-lg"}>Friends</p>
+                        <ul>
+                            {user.friends?.length === 0 && <li>No friends</li>}
+                            {user.friends?.map((friend) => (
+                                // We need to fetch friend data from the server from the friend id
+                                <li key={friend}>{friend}</li>
+                            ))}
+                        </ul>
+                    </div>}
+                </div>
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import MessageItem from "@/components/MessageItem";
 import ChatInputMenu from "@/components/ChatInputMenu";
 import {useSocket} from "@/context/socketContext";
 import {useEffect, useRef, useState} from "react";
-import Message from "@/types/Message";
+import IMessage from "@/types/IMessage";
 import AppBar from "@/components/AppBar";
 
 const DevSvg = () => (
@@ -12,11 +12,11 @@ const DevSvg = () => (
 );
 
 export default function Chat() {
-    const [messages, setMessages] = useState([] as Message[]);
+    const [messages, setMessages] = useState([] as IMessage[]);
     const socket = useSocket();
     const msgListDiv = useRef<HTMLDivElement>(null);
 
-    const InputMenuCallback = (data: Message) => {
+    const InputMenuCallback = (data: IMessage) => {
         setMessages([...messages, data]);
     }
 
@@ -32,11 +32,11 @@ export default function Chat() {
     useEffect(scrollToBottom, [messages]);
 
     useEffect(() => {
-        socket.on("msg_tx", (data: Message) => {
+        socket.on("msg_tx", (data: IMessage) => {
             setMessages([...messages, {...data, isSelf: false}]);
         });
 
-        socket.on("msg_fetch", (data: Message[]) => {
+        socket.on("msg_fetch", (data: IMessage[]) => {
             console.log("msg_fetch", data);
             setMessages(data);
         });

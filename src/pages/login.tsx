@@ -3,12 +3,18 @@ import React, {useContext, useState} from "react";
 import axiosInstance from "@/api/axiosInstance";
 import AppBar from "@/components/AppBar";
 import {UserContext} from "@/context/userContext";
+import { useRouter } from 'next/router';
+import {useSocket} from "@/context/socketContext";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
     const setUser = useContext(UserContext).setUser;
+
+    const socket = useSocket();
+    const router = useRouter();
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -21,6 +27,8 @@ export default function Login() {
             console.log(response);
             localStorage.setItem("user", JSON.stringify(response.data));
             setUser(response.data);
+            socket.emit("authenticate", response.data.token);
+            router.replace("/profile");
         }).catch((error) => {
             console.log(error);
         });

@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import Message from "@/types/Message";
+import IMessage from "@/types/IMessage";
 
 interface MessageItemProps {
-    message: Message;
+    message: IMessage;
 }
 
 export default function MessageItem({message}: MessageItemProps) {

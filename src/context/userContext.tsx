@@ -26,6 +26,7 @@ export interface User {
     online?: boolean,
     socketId?: string,
     profilePicture?: string,
+    createdAt?: Date,
 }
 
 interface UserContext {

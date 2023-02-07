@@ -13,10 +13,11 @@ export function SocketProvider({children}: any) {
 
     const socket = io(process.env.NODE_ENV === "production" ? deployurl : localurl);
 
+    // Set socketId of the user
+
+
     // Check if we have a token in the local storage
     // If we have a token, we need to send it to the server to authenticate the user
-
-
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         if (user.token) {
