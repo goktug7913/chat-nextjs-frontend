@@ -21,7 +21,7 @@ export default function ChatInputMenu( {setter, messageList}: Props ) {
             senderInternalId: user.user._id,
             sender: user.user.username,
             message: message,
-            date: new Date().toISOString(),
+            date: new Date(),
             isSelf: false,
             room: "test",
         };
