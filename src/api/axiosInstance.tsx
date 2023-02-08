@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {useRouter} from "next/router";
 const deployUrl = "https://chatsv.goktug.xyz/api";
 const devUrl = "http://localhost:3001/api";
 
@@ -25,7 +26,8 @@ axiosInstance.interceptors.request.use(
             } else {
                 console.log("User is not logged in");
                 // Redirect the user to login page with NEXT router
-                window.location.href = '/login';
+                const router = useRouter();
+                await router.push('/login');
             }
         }
 
@@ -39,6 +41,14 @@ axiosInstance.interceptors.response.use(
         // Do something with response data
         console.log("Response interceptor:");
         console.log(response);
+
+        // If the response is 401, the user is not authorized
+        if (response.status === 401) {
+            // Redirect the user to login page with NEXT router
+            const router = useRouter();
+            router.push('/login');
+            // TODO: Try to refresh the token, if it fails, redirect to login with a message
+        }
         return response;
     }
 );

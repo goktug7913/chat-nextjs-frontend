@@ -3,12 +3,16 @@ import AppBar from "@/components/AppBar";
 import React, {useContext} from "react";
 import {useSocket} from "@/context/socketContext";
 import {UserContext} from "@/context/userContext";
+import FirebaseContext from "@/api/firebase";
 
 export default function Profile() {
-    const user = useContext(UserContext).user;
+    //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
     const socket = useSocket();
 
-    const regDate = new Date(user.createdAt || 0);
+    const firebase = useContext(FirebaseContext);
+    const user = firebase?.auth?.currentUser;
+
+    const regDate = new Date(user?.metadata?.creationTime);
     return (
         <>
             <Head>
@@ -22,13 +26,17 @@ export default function Profile() {
 
                     <div className="grid row-auto col-auto">
                         <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
-                            <h6 className="text-2xl font-bold text-center">You</h6>
-                            <p>Username: {user.username}</p>
+
+                            <div className="flex flex-row items-center justify-center">
+                                <img className={"rounded-full w-8"} src={user?.photoURL} alt={"Profile Picture"}/>
+                                <h6 className="text-2xl font-bold ml-3 text-center">You</h6>
+                            </div>
+
+                            <p>Name: {user.displayName}</p>
                             <p>Email: {user.email}</p>
-                            <p>Online: {user.online ? "Yes" : "No"}</p>
-                            <p>Last Login: {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "Never"}</p>
+                            <p>Email Verified: {user.emailVerified ? "Yes" : "No"}</p>
+                            <p>Phone: {user.phoneNumber ? user.phoneNumber : "No number"}</p>
                             <p>Registered: {regDate.toLocaleString()}</p>
-                            <p>Internal ID: {user._id}</p>
                             <p>Socket ID: {socket.id}</p>
                             <p>Socket Connected: {socket.connected ? "Yes" : "No"}</p>
                         </div>

@@ -1,9 +1,10 @@
 import Head from "next/head";
 import AppBar from "@/components/AppBar";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import axiosInstance from "@/api/axiosInstance";
 import {useRouter} from "next/router";
 import {IRoom} from "@/types/IRoom";
+import {UserContext} from "@/context/userContext";
 
 export default function NewRoom()
 {
@@ -15,6 +16,9 @@ export default function NewRoom()
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const user = useContext(UserContext).user;
+    const setUser = useContext(UserContext).setUser;
 
     const router = useRouter();
 
@@ -39,7 +43,12 @@ export default function NewRoom()
         axiosInstance.post("/rooms/new", room).then((response) => {
             console.log(response);
             setLoading(false);
-            if (response.status === 201) {router.replace("/rooms")} else {setError("Something went wrong")}
+            if (response.status === 200) {
+                // Server will return the updated user object, which we can use to update the context
+                setUser(response.data.user);
+
+                router.replace("/rooms")
+            } else {setError("Something went wrong")}
         }).catch((error) => {
             console.log(error);
             setLoading(false);

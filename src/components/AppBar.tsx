@@ -2,6 +2,9 @@ import Link from "next/link";
 import React, {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/context/userContext";
 import { useRouter } from 'next/router';
+import axiosInstance from "@/api/axiosInstance";
+import {IRoom} from "@/types/IRoom";
+import FirebaseContext from "@/api/firebase";
 
 const DownArrow = () => {
     return (
@@ -23,10 +26,25 @@ export default function AppBar() {
     const [expanded, setExpanded] = useState(false);
     const rootRef = React.useRef<HTMLDivElement>(null);
     const expandRef = React.useRef<HTMLDivElement>(null);
+
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
 
+    const firebase = useContext(FirebaseContext);
+
+    const [rooms, setRooms] = useState<IRoom[]>([{} as IRoom]);
+
     const router = useRouter();
+
+    useEffect(() => {
+        let Rooms: IRoom[] = [];
+        // Fetch rooms from server
+        user.rooms?.forEach(async (room) => {
+            const res = await axiosInstance.get(`/rooms/get/${room}`);
+            Rooms.push(res.data);
+        });
+        setRooms(Rooms);
+    }, [user.rooms]);
 
     useEffect(() => {
         if (!rootRef.current) return;
@@ -76,11 +94,11 @@ export default function AppBar() {
 
                 <div className={"flex-grow"} />
 
-                {user.token ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>}
-                {user.token ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}
+                {firebase.auth.currentUser ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>}
+                {firebase.auth.currentUser ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}
 
-                {user.token ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/profile">Profile</Link></button> : <></>}
-                {user.token ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"} onClick={HandleLogout}>Logout</button> : <></>}
+                {firebase.auth.currentUser ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/profile">Profile</Link></button> : <></>}
+                {firebase.auth.currentUser ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"} onClick={HandleLogout}>Logout</button> : <></>}
             </div>
 
             <div className={`flex grow px-1 py-2 text-white transition-all duration-500 ease-in-out`} ref={expandRef}>
@@ -90,17 +108,23 @@ export default function AppBar() {
                         <p className={"text-sm"}>Discover new channels and friends</p>
                     </div>
 
-                    {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
+                    {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5  overflow-x-hidden overflow-y-scroll"}>
                         <div className="flex flex-row">
                             <p className={"font-bold text-lg"}>Rooms</p>
                             <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}
-                            onClick={() => { router.push("/rooms/newroom") }}>+</button>
+                            onClick={() => { router.push("/room/newroom") }}>+</button>
                         </div>
                         <ul>
                             {user.rooms?.length === 0 && <li>No rooms</li>}
-                            {user.rooms?.map((room) => (
-                                // We need to fetch room data from the server from the room id
-                                <li key={room}>{room}</li>
+                            {rooms.map((room) => (
+                                <li key={room._id}>
+                                    <Link href={`/room/${room._id}`}>
+                                        <div className={"flex flex-row justify-between"}>
+                                            <p className={"text-sm"}>{room.name}</p>
+                                            <p className={"text-sm text-gray-300"}>{room.joinTag}</p>
+                                        </div>
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
                     </div>}

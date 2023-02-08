@@ -6,11 +6,15 @@ import {UserContext} from "@/context/userContext";
 import { useRouter } from 'next/router';
 import {useSocket} from "@/context/socketContext";
 
+import FirebaseContext from "@/api/firebase";
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
     const setUser = useContext(UserContext).setUser;
+
+    const firebase = useContext(FirebaseContext);
 
     const socket = useSocket();
     const router = useRouter();
@@ -63,7 +67,13 @@ export default function Login() {
 
                         <button type="submit" className="px-4 py-2 mt-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login</button>
                     </form>
-
+                    <button onClick={() => {
+                        firebase.signInWithGoogle().then((result: any) => {
+                            console.log(result);
+                        }).catch((error: any) => {
+                            console.log(error);
+                        });
+                    }} className="px-4 py-2 mt-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login with Google</button>
                 </div>
             </div>
         </>
