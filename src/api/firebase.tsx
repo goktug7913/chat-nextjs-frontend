@@ -1,10 +1,10 @@
 // Initialize Firebase
 import {initializeApp} from "firebase/app";
 import {getDatabase} from "firebase/database";
-import {getAnalytics} from "firebase/analytics";
 import {getAuth} from "@firebase/auth";
 import React, {createContext, useContext} from "react";
 import {useSignInWithGoogle} from "react-firebase-hooks/auth";
+import firebase from "firebase/compat";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAf5WQbDPjJYJqFf9JeZTQu-9qofz2jRDs",
@@ -45,6 +45,7 @@ const FirebaseProvider = ({children}: {children: React.ReactNode}) => {
     Firebase.auth = auth;
     // Firebase.analytics = analytics;
 
+    // @ts-ignore
     [Firebase.signInWithGoogle, Firebase.user, Firebase.loading, Firebase.error] = useSignInWithGoogle(auth);
 
     return (

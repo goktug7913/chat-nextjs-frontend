@@ -45,7 +45,7 @@ export default function Profile() {
                             <h6 className="text-2xl font-bold text-center">Friends</h6>
                             <div className="grid row-auto col-auto">
                                 {user.friends?.length === 0 && <p>You have no friends...</p>}
-                                {user.friends?.map((friend) => (
+                                {user.friends?.map((friend: React.Key | null | undefined) => (
                                     <div key={friend} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
                                         friend
                                     </div>
@@ -57,7 +57,7 @@ export default function Profile() {
                             <h6 className="text-2xl font-bold text-center">Friend Requests</h6>
                             <div className="grid row-auto col-auto">
                                 {user.friendRequests?.length === 0 && <p>You have no friend requests...</p>}
-                                {user.friendRequests?.map((request) => (
+                                {user.friendRequests?.map((request: React.Key | null | undefined) => (
                                     <div key={request} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
                                         request
                                     </div>
@@ -69,7 +69,7 @@ export default function Profile() {
                             <h6 className="text-2xl font-bold text-center">Blocked Users</h6>
                             <div className="grid row-auto col-auto">
                                 {user.blockedUsers?.length === 0 && <p>You have not blocked anyone...</p>}
-                                {user.blockedUsers?.map((blocked) => (
+                                {user.blockedUsers?.map((blocked: React.Key | null | undefined) => (
                                     <div key={blocked} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
                                         blocked
                                     </div>
