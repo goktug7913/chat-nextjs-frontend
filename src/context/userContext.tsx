@@ -1,12 +1,5 @@
 import React, {useReducer} from "react";
 
-interface Room {
-    id: number;
-    name: string;
-    description: string;
-    userCount: number;
-    joinedUsernames?: string[];
-}
 export interface User {
     _id: string;
     token: string;

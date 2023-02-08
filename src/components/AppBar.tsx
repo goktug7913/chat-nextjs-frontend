@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/context/userContext";
+import { useRouter } from 'next/router';
 
 const DownArrow = () => {
     return (
@@ -24,6 +25,8 @@ export default function AppBar() {
     const expandRef = React.useRef<HTMLDivElement>(null);
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
+
+    const router = useRouter();
 
     useEffect(() => {
         if (!rootRef.current) return;
@@ -90,7 +93,8 @@ export default function AppBar() {
                     {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
                         <div className="flex flex-row">
                             <p className={"font-bold text-lg"}>Rooms</p>
-                            <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}>+</button>
+                            <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}
+                            onClick={() => { router.push("/rooms/newroom") }}>+</button>
                         </div>
                         <ul>
                             {user.rooms?.length === 0 && <li>No rooms</li>}
