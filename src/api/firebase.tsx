@@ -3,7 +3,7 @@ import {initializeApp} from "firebase/app";
 import {getDatabase} from "firebase/database";
 import {getAuth} from "@firebase/auth";
 import React, {createContext, useContext} from "react";
-import {useSignInWithGoogle} from "react-firebase-hooks/auth";
+import {useSignInWithGoogle, useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import firebase from "firebase/compat";
 
 const firebaseConfig = {
@@ -21,10 +21,12 @@ export interface IFirebase {
     database: any,
     auth: any,
     // analytics: any,
-    user: firebase.User | null,
+    user: firebase.User | null | undefined,
     loading: boolean,
     error: any,
     signInWithGoogle: any,
+    signInWithEmailAndPassword: any,
+    signOut: any,
 }
 
 export const app = initializeApp(firebaseConfig);
@@ -47,7 +49,7 @@ const FirebaseProvider = ({children}: {children: React.ReactNode}) => {
 
     // @ts-ignore
     [Firebase.signInWithGoogle, Firebase.user, Firebase.loading, Firebase.error] = useSignInWithGoogle(auth);
-
+    [Firebase.signInWithEmailAndPassword, Firebase.user, Firebase.loading, Firebase.error] = useSignInWithEmailAndPassword(auth);
     return (
         <FirebaseContext.Provider value={Firebase}>
             {children}

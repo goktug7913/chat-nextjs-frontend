@@ -15,25 +15,31 @@ export default function Login() {
     const setUser = useContext(UserContext).setUser;
 
     const firebase = useContext(FirebaseContext);
+    const db = firebase.database;
 
     const socket = useSocket();
     const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        axiosInstance.post("/auth/login", {
-            email,
-            password,
-            rememberMe,
-        }
-        ).then((response) => {
-            console.log(response);
-            localStorage.setItem("user", JSON.stringify(response.data));
-            setUser(response.data);
-            socket.emit("authenticate", response.data.token);
-            router.replace("/profile");
-        }).catch((error) => {
+        console.log("Login with: " + email + " and " + password + "")
+        firebase.signInWithEmailAndPassword(email, password).then((userCredential: { user: any; }) => {
+            console.log("Response: " + userCredential);
+            const user = userCredential.user;
+            if (user) {
+                const userRef = db.ref('users/' + user.uid);
+                userRef.once('value', (snapshot: { val: () => any; }) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        console.log(data);
+                        setUser(data);
+                        localStorage.setItem("user", JSON.stringify(data));
+                        socket.emit('login', data);
+                        router.push('/profile');
+                    }
+                });
+            }
+        }).catch((error: any) => {
             console.log(error);
         });
     }
@@ -67,13 +73,7 @@ export default function Login() {
 
                         <button type="submit" className="px-4 py-2 mt-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login</button>
                     </form>
-                    <button onClick={() => {
-                        firebase.signInWithGoogle().then((result: any) => {
-                            console.log(result);
-                        }).catch((error: any) => {
-                            console.log(error);
-                        });
-                    }} className="px-4 py-2 mt-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login with Google</button>
+                    <button onClick={() => {firebase.signInWithGoogle()}} className="px-4 py-2 mt-4 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login with Google</button>
                 </div>
             </div>
         </>
