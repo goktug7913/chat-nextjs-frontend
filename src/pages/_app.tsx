@@ -5,7 +5,6 @@ import {FirebaseProvider} from "@/api/firebase";
 import { Analytics } from '@vercel/analytics/react';
 
 import {UserProvider} from "@/context/userContext";
-import {SocketProvider} from "@/context/socketContext";
 import React, {useEffect} from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -28,14 +27,11 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <FirebaseProvider>
         <UserProvider>
-            <SocketProvider>
-                <Analytics />
-                <div className="bg-gradient-to-tr from-violet-800 to-purple-400 h-screen flex flex-col max-h-screen overflow-y-scroll">
-                    <Component {...pageProps} />
-                </div>
-            </SocketProvider>
+            <Analytics />
+            <div className="bg-gradient-to-tr from-violet-800 to-purple-400 h-screen flex flex-col max-h-screen overflow-y-scroll">
+                <Component {...pageProps} />
+            </div>
         </UserProvider>
         </FirebaseProvider>
     )
 }
-

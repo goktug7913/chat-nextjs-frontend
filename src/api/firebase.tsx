@@ -1,10 +1,11 @@
 // Initialize Firebase
 import {initializeApp} from "firebase/app";
 import {getDatabase} from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 import {getAuth} from "@firebase/auth";
 import React, {createContext, useContext} from "react";
 import {useSignInWithGoogle, useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
-import firebase from "firebase/compat";
+import { User } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAf5WQbDPjJYJqFf9JeZTQu-9qofz2jRDs",
@@ -19,9 +20,10 @@ const firebaseConfig = {
 export interface IFirebase {
     app: any,
     database: any,
+    firestore: any,
     auth: any,
     // analytics: any,
-    user: firebase.User | null | undefined,
+    user: User | null | undefined,
     loading: boolean,
     error: any,
     signInWithGoogle: any,
@@ -31,6 +33,7 @@ export interface IFirebase {
 
 export const app = initializeApp(firebaseConfig);
 export const database = getDatabase(app);
+export const firestore = getFirestore(app);
 export const auth = getAuth(app);
 
 // TODO: Analytics is not working, window is not defined
@@ -44,6 +47,7 @@ const FirebaseProvider = ({children}: {children: React.ReactNode}) => {
 
     Firebase.app = app;
     Firebase.database = database;
+    Firebase.firestore = firestore;
     Firebase.auth = auth;
     // Firebase.analytics = analytics;
 

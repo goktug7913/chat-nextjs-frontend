@@ -4,7 +4,6 @@ import axiosInstance from "@/api/axiosInstance";
 import AppBar from "@/components/AppBar";
 import {UserContext} from "@/context/userContext";
 import { useRouter } from 'next/router';
-import {useSocket} from "@/context/socketContext";
 
 import FirebaseContext from "@/api/firebase";
 
@@ -17,7 +16,6 @@ export default function Login() {
     const firebase = useContext(FirebaseContext);
     const db = firebase.database;
 
-    const socket = useSocket();
     const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +32,6 @@ export default function Login() {
                         console.log(data);
                         setUser(data);
                         localStorage.setItem("user", JSON.stringify(data));
-                        socket.emit('login', data);
                         router.push('/profile');
                     }
                 });

@@ -1,6 +1,5 @@
 import MessageItem from "@/components/MessageItem";
 import ChatInputMenu from "@/components/ChatInputMenu";
-import {useSocket} from "@/context/socketContext";
 import {useEffect, useRef, useState} from "react";
 import IMessage from "@/types/IMessage";
 import AppBar from "@/components/AppBar";
@@ -13,7 +12,6 @@ const DevSvg = () => (
 
 export default function Chat() {
     const [messages, setMessages] = useState([] as IMessage[]);
-    const socket = useSocket();
     const msgListDiv = useRef<HTMLDivElement>(null);
 
     const InputMenuCallback = (data: IMessage) => {
@@ -30,21 +28,6 @@ export default function Chat() {
         });
     }
     useEffect(scrollToBottom, [messages]);
-
-    useEffect(() => {
-        socket.on("msg_tx", (data: IMessage) => {
-            setMessages([...messages, {...data, isSelf: false}]);
-        });
-
-        socket.on("msg_fetch", (data: IMessage[]) => {
-            console.log("msg_fetch", data);
-            setMessages(data);
-        });
-
-        return () => {
-            socket.off("msg_tx");
-        }
-    }, [messages, socket]);
 
     useEffect(() => {
         // Scroll to bottom on new message

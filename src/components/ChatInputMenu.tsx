@@ -1,5 +1,4 @@
 import {useContext, useState} from "react";
-import {useSocket} from "@/context/socketContext";
 import IMessage from "@/types/IMessage";
 import {UserContext} from "@/context/userContext";
 
@@ -9,8 +8,6 @@ interface Props {
 }
 export default function ChatInputMenu( {setter, messageList}: Props ) {
     const [message, setMessage] = useState("");
-    const socket = useSocket();
-    const [debugNick, setDebugNick] = useState(`User ${Math.floor(Math.random() * 1000)}`);
     const user = useContext(UserContext);
 
     const HandleSubmit = (e: any) => {
@@ -26,7 +23,6 @@ export default function ChatInputMenu( {setter, messageList}: Props ) {
             room: "test",
         };
 
-        socket.emit("msg_rx", data);
         data.isSelf = true;
         setter(data);
         setMessage("");
