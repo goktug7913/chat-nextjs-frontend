@@ -36,7 +36,7 @@ export const database = getDatabase(app);
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);
 
-// TODO: Analytics is not working, window is not defined
+// TODO: Analytics is not working, window is not defined (this code might be running before the page is loaded)
 // export const analytics = getAnalytics(app);
 
 const FirebaseContext = createContext<IFirebase>({} as IFirebase);

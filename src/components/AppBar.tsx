@@ -79,6 +79,7 @@ export default function AppBar() {
 
      const HandleLogout = () => {
         userCtx.setUser({} as any);
+        firebase.auth.signOut();
      }
 
     return (

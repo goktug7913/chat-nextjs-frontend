@@ -2,12 +2,14 @@ import Head from "next/head";
 import AppBar from "@/components/AppBar";
 import React, {useContext, useEffect} from "react";
 import FirebaseContext, {firestore} from "@/api/firebase";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 export default function Profile() {
     //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
 
     const firebase = useContext(FirebaseContext);
-    const user = firebase?.auth?.currentUser;
+
+    const [user, loading, error] = useAuthState(firebase.auth);
 
     useEffect(() => {
         console.log(firebase.firestore)

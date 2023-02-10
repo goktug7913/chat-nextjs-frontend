@@ -1,6 +1,5 @@
 import Head from "next/head";
-import React, {useContext, useState} from "react";
-import axiosInstance from "@/api/axiosInstance";
+import React, {useContext, useEffect, useState} from "react";
 import AppBar from "@/components/AppBar";
 import {UserContext} from "@/context/userContext";
 import { useRouter } from 'next/router';
@@ -18,6 +17,12 @@ export default function Login() {
 
     const router = useRouter();
 
+    useEffect(() => {
+        if (firebase.auth.currentUser) {
+            router.push('/profile').then(r => console.log(r));
+        }
+    }, [firebase.auth.currentUser]);
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log("Login with: " + email + " and " + password + "")
@@ -32,7 +37,7 @@ export default function Login() {
                         console.log(data);
                         setUser(data);
                         localStorage.setItem("user", JSON.stringify(data));
-                        router.push('/profile');
+                        router.push('/profile').then(r => console.log(r));
                     }
                 });
             }
