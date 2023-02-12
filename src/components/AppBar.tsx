@@ -81,7 +81,7 @@ export default function AppBar() {
     }, [expanded]);
 
     return (
-        <div className={`flex flex-col shrink bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-1 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
+        <div className={`flex flex-col flex-shrink-0 bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-1 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
             <div className="bg-indigo-700 px-4 py-2.5 flex flex-row">
                 <button className={"bg-purple-600 rounded-md px-1 py-1 mr-2"} onClick={() => setExpanded(prevState => !prevState)}>
                     {expanded ? <DownArrow /> : <RightArrow />}

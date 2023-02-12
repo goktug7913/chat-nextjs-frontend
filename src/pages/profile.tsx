@@ -130,19 +130,21 @@ function Profile() {
                             <div className="grid row-auto col-auto">
                                 {resolvedRooms.length === 0 && <p>You have no rooms...</p>}
                                 {resolvedRooms.map((room: any) => (
-                                    <div key={room} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
-                                        <Link href={`/room/${room?.id}`}>{room?.name}</Link>
+                                    <div key={room} className="flex flex-col text-white">
+                                        <button className={"bg-purple-600 rounded-md px-1 py-1 mr-2"}>
+                                            <Link href={`/room/${room?.id}`}>{room?.name}</Link>
+                                        </button>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
+                        <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl overflow-y-scroll max-h-64">
                             <h6 className="text-2xl font-bold text-center">Messages</h6>
                             <div className="grid row-auto col-auto">
                                 {resolvedMessages.length === 0 && <p>You have no messages...</p>}
                                 {resolvedMessages.map((message: any) => (
-                                    <div key={message} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
+                                    <div key={message} className="flex flex-col p-1 m-0.5 border-violet-600 border-b">
                                         {message?.content.toString()}
                                     </div>
                                 ))}
