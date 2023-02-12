@@ -94,7 +94,7 @@ export default function AppBar() {
                 <div className={"flex-grow"} />
 
                 {user ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>}
-                {user ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}
+                {/*{user ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}*/}
 
                 {user ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/profile">Profile</Link></button> : <></>}
                 {user ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"} onClick={HandleLogout}>Logout</button> : <></>}
