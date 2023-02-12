@@ -87,7 +87,7 @@ export default function Chat( {roomid}: IChatProps ) {
             <div className="flex grow shrink"></div>
 
             <div className="justify-between w-full h-12 self-end">
-                <ChatInputMenu setter={InputMenuCallback} messageList={messages} roomid={roomid}/>
+                <ChatInputMenu setter={InputMenuCallback} messageList={messages} roomid={roomid as string}/>
             </div>
         </div>
         </>

@@ -107,37 +107,37 @@ export default function AppBar() {
                         <p className={"text-sm"}>Discover new channels and friends</p>
                     </div>
 
-                    {user && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5  overflow-x-hidden overflow-y-scroll"}>
-                        <div className="flex flex-row">
-                            <p className={"font-bold text-lg"}>Rooms</p>
-                            <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}
-                            onClick={() => { router.push("/room/newroom") }}>+</button>
-                        </div>
-                        <ul>
-                            {user.rooms?.length === 0 && <li>No rooms</li>}
-                            {rooms.map((room) => (
-                                <li key={room._id}>
-                                    <Link href={`/room/${room._id}`}>
-                                        <div className={"flex flex-row justify-between"}>
-                                            <p className={"text-sm"}>{room.name}</p>
-                                            <p className={"text-sm text-gray-300"}>{room.joinTag}</p>
-                                        </div>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>}
+                    {/*{user && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5  overflow-x-hidden overflow-y-scroll"}>*/}
+                    {/*    <div className="flex flex-row">*/}
+                    {/*        <p className={"font-bold text-lg"}>Rooms</p>*/}
+                    {/*        <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}*/}
+                    {/*        onClick={() => { router.push("/room/newroom") }}>+</button>*/}
+                    {/*    </div>*/}
+                    {/*    <ul>*/}
+                    {/*        {user?.rooms?.length === 0 && <li>No rooms</li>}*/}
+                    {/*        {rooms.map((room) => (*/}
+                    {/*            <li key={room._id}>*/}
+                    {/*                <Link href={`/room/${room._id}`}>*/}
+                    {/*                    <div className={"flex flex-row justify-between"}>*/}
+                    {/*                        <p className={"text-sm"}>{room.name}</p>*/}
+                    {/*                        <p className={"text-sm text-gray-300"}>{room.joinTag}</p>*/}
+                    {/*                    </div>*/}
+                    {/*                </Link>*/}
+                    {/*            </li>*/}
+                    {/*        ))}*/}
+                    {/*    </ul>*/}
+                    {/*</div>}*/}
 
-                    {user && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
-                        <p className={"font-bold text-lg"}>Friends</p>
-                        <ul>
-                            {user.friends?.length === 0 && <li>No friends</li>}
-                            {user.friends?.map((friend) => (
-                                // We need to fetch friend data from the server from the friend id
-                                <li key={friend}>{friend}</li>
-                            ))}
-                        </ul>
-                    </div>}
+                    {/*{user && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>*/}
+                    {/*    <p className={"font-bold text-lg"}>Friends</p>*/}
+                    {/*    <ul>*/}
+                    {/*        {user.friends?.length === 0 && <li>No friends</li>}*/}
+                    {/*        {user.friends?.map((friend) => (*/}
+                    {/*            // We need to fetch friend data from the server from the friend id*/}
+                    {/*            <li key={friend}>{friend}</li>*/}
+                    {/*        ))}*/}
+                    {/*    </ul>*/}
+                    {/*</div>}*/}
                 </div>
             </div>
         </div>

@@ -35,7 +35,7 @@ export default function NewRoom()
             admins: [], // TODO: Ability to add admins on room creation
             messages: [],
             users: [],
-            createdAt: new Date(),
+            createdAt: new Date().toString(),
         }
 
         setLoading(true);

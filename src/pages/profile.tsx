@@ -5,9 +5,10 @@ import {useRouter} from "next/router";
 
 import {auth, firestore} from '@/api/firebase';
 import {useAuthState} from "react-firebase-hooks/auth";
-import {doc, collection, getDoc} from "firebase/firestore";
-import {useCollectionData, useDocument} from "react-firebase-hooks/firestore";
+import {doc, getDoc} from "firebase/firestore";
+import {useDocument} from "react-firebase-hooks/firestore";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Profile() {
     //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
@@ -61,26 +62,6 @@ export default function Profile() {
         }
     }, [user,loading]);
 
-    const resolveRef:any = (ref: any) => {
-        const path = ref.path;
-        getDoc(doc(db, path)).then((doc) => {
-            if (doc.exists()) {
-                console.log("Document data:", doc.data());
-                const data = {
-                    ...doc.data(),
-                    id: doc.id
-                }
-
-                return data
-            } else {
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-            return "Error";
-        });
-    }
-
     useEffect(() => {
         if (user && !loading) console.log(user.data());
         if (!user && !loading) { router.push('/login').then(); }
@@ -103,7 +84,7 @@ export default function Profile() {
                         <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
 
                             <div className="flex flex-row items-center justify-center">
-                                <img className={"rounded-full w-8"} src={user?.data()?.photoURL} alt={"Profile Picture"}/>
+                                <Image className={"rounded-full w-8"} src={user?.data()?.photoURL} alt={"Profile Picture"}/>
                                 <h6 className="text-2xl font-bold ml-3 text-center">You</h6>
                             </div>
 
