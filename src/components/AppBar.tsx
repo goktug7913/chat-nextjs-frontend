@@ -1,10 +1,10 @@
 import Link from "next/link";
-import React, {useContext, useEffect, useState} from "react";
-import {UserContext} from "@/context/userContext";
+import React, {useEffect, useState} from "react";
 import { useRouter } from 'next/router';
-import axiosInstance from "@/api/axiosInstance";
 import {IRoom} from "@/types/IRoom";
-import FirebaseContext from "@/api/firebase";
+
+import {auth} from '@/api/firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
 
 const DownArrow = () => {
     return (
@@ -23,28 +23,31 @@ const RightArrow = () => {
 }
 
 export default function AppBar() {
+    const [user, loading, error] = useAuthState(auth);
+
     const [expanded, setExpanded] = useState(false);
     const rootRef = React.useRef<HTMLDivElement>(null);
     const expandRef = React.useRef<HTMLDivElement>(null);
-
-    const userCtx = useContext(UserContext);
-    const user = userCtx.user;
-
-    const firebase = useContext(FirebaseContext);
 
     const [rooms, setRooms] = useState<IRoom[]>([{} as IRoom]);
 
     const router = useRouter();
 
-    useEffect(() => {
-        let Rooms: IRoom[] = [];
-        // Fetch rooms from server
-        user.rooms?.forEach(async (room) => {
-            const res = await axiosInstance.get(`/rooms/get/${room}`);
-            Rooms.push(res.data);
+    // useEffect(() => {
+    //     let Rooms: IRoom[] = [];
+    //     // Fetch rooms from server
+    //     user.rooms?.forEach(async (room) => {
+    //         const res = await axiosInstance.get(`/rooms/get/${room}`);
+    //         Rooms.push(res.data);
+    //     });
+    //     setRooms(Rooms);
+    // }, [user.rooms]);
+
+    const HandleLogout = () => {
+        auth.signOut().then(r => {
+            router.push("/");
         });
-        setRooms(Rooms);
-    }, [user.rooms]);
+    }
 
     useEffect(() => {
         if (!rootRef.current) return;
@@ -75,12 +78,7 @@ export default function AppBar() {
             if (!cleanupRef) return;
             cleanupRef.removeEventListener("transitionstart", handleTransitionEnd);
         }
-    } , [expanded]);
-
-     const HandleLogout = () => {
-        userCtx.setUser({} as any);
-        firebase.auth.signOut();
-     }
+    }, [expanded]);
 
     return (
         <div className={`flex flex-col shrink bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-1 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
@@ -95,11 +93,11 @@ export default function AppBar() {
 
                 <div className={"flex-grow"} />
 
-                {firebase.auth.currentUser ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>}
-                {firebase.auth.currentUser ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}
+                {user ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1"}><Link href="/login">Login</Link></button>}
+                {user ? <></> : <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/register">Register</Link></button>}
 
-                {firebase.auth.currentUser ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/profile">Profile</Link></button> : <></>}
-                {firebase.auth.currentUser ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"} onClick={HandleLogout}>Logout</button> : <></>}
+                {user ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"}><Link href="/profile">Profile</Link></button> : <></>}
+                {user ? <button className={"bg-purple-600 rounded-md text-white font-sans font-bold px-2 py-1 ml-1.5"} onClick={HandleLogout}>Logout</button> : <></>}
             </div>
 
             <div className={`flex grow px-1 py-2 text-white transition-all duration-500 ease-in-out`} ref={expandRef}>
@@ -109,7 +107,7 @@ export default function AppBar() {
                         <p className={"text-sm"}>Discover new channels and friends</p>
                     </div>
 
-                    {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5  overflow-x-hidden overflow-y-scroll"}>
+                    {user && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5  overflow-x-hidden overflow-y-scroll"}>
                         <div className="flex flex-row">
                             <p className={"font-bold text-lg"}>Rooms</p>
                             <button className={"bg-purple-600 rounded-md text-white font-sans font-bold ml-1 mt-1 px-2"}
@@ -130,7 +128,7 @@ export default function AppBar() {
                         </ul>
                     </div>}
 
-                    {user.token && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
+                    {user && <div className={"col-span-1 row-span-1 border-purple-800 border rounded-xl px-1.5 py-1 mx-1.5"}>
                         <p className={"font-bold text-lg"}>Friends</p>
                         <ul>
                             {user.friends?.length === 0 && <li>No friends</li>}

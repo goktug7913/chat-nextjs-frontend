@@ -1,22 +1,35 @@
-import {useContext, useState} from "react";
+import {useState} from "react";
 import IMessage from "@/types/IMessage";
-import {UserContext} from "@/context/userContext";
+import {useRouter} from "next/router";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth, firestore} from "@/api/firebase";
+import {useDocument} from "react-firebase-hooks/firestore";
+import {doc} from "firebase/firestore";
 
 interface Props {
     setter: (data: IMessage) => void;
     messageList: IMessage[];
+    roomid: string;
 }
-export default function ChatInputMenu( {setter, messageList}: Props ) {
+
+export default function ChatInputMenu( {setter, messageList, roomid}: Props ) {
     const [message, setMessage] = useState("");
-    const user = useContext(UserContext);
+
+    const router = useRouter();
+    const [authUser, authLoading, authError] = useAuthState(auth);
+
+    const db = firestore;
+    const docRef = doc(db, "rooms", roomid);
+    const [user, loading, error] = useDocument(docRef);
 
     const HandleSubmit = (e: any) => {
         e.preventDefault();
+
         if (message.trim().length === 0) return;
-        console.log(user);
+
         let data = {
-            senderInternalId: user.user._id,
-            sender: user.user.username,
+            senderInternalId: user?.data()?.uid,
+            sender: user?.data()?.displayName,
             message: message,
             date: new Date(),
             isSelf: false,

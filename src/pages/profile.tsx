@@ -1,21 +1,93 @@
 import Head from "next/head";
 import AppBar from "@/components/AppBar";
-import React, {useContext, useEffect} from "react";
-import FirebaseContext, {firestore} from "@/api/firebase";
+import React, {useEffect} from "react";
+import {useRouter} from "next/router";
+
+import {auth, firestore} from '@/api/firebase';
 import {useAuthState} from "react-firebase-hooks/auth";
+import {doc, collection, getDoc} from "firebase/firestore";
+import {useCollectionData, useDocument} from "react-firebase-hooks/firestore";
+import Link from "next/link";
 
 export default function Profile() {
     //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
+    const router = useRouter();
+    const [authUser, authLoading, authError] = useAuthState(auth);
 
-    const firebase = useContext(FirebaseContext);
+    const db = firestore;
+    const docRef = doc(db, "users", authUser?.uid as string);
+    const [user, loading, error] = useDocument(docRef);
 
-    const [user, loading, error] = useAuthState(firebase.auth);
+    const [resolvedRooms, setResolvedRooms] = React.useState<any[]>([]);
+    const [resolvedMessages, setResolvedMessages] = React.useState<any[]>([]);
 
     useEffect(() => {
-        console.log(firebase.firestore)
-    }, [user]);
+        if (user && !loading) {
+            setResolvedRooms([]);
+            setResolvedMessages([]);
 
-    const regDate = new Date(user?.metadata?.creationTime);
+            const rooms = user?.data()?.rooms as any[];
+            rooms.forEach((room) => {
+                const path = room.path;
+                getDoc(doc(db, path)).then((doc) => {
+                    if (doc.exists()) {
+                        console.log("Document data:", doc.data());
+
+                        const data = {
+                            ...doc.data(),
+                            id: doc.id
+                        }
+
+                        setResolvedRooms((prev) => [...prev, data]);
+                    } else {
+                        console.log("No such document!");
+                    }
+                });
+            });
+
+            const messages = user?.data()?.messages as any[];
+            messages.forEach((message) => {
+                const path = message.path;
+                getDoc(doc(db, path)).then((doc) => {
+                    if (doc.exists()) {
+                        console.log("Document data:", doc.data());
+                        const data = doc.data();
+                        setResolvedMessages((prev) => [...prev, data]);
+                    } else {
+                        console.log("No such document!");
+                    }
+                });
+            });
+        }
+    }, [user,loading]);
+
+    const resolveRef:any = (ref: any) => {
+        const path = ref.path;
+        getDoc(doc(db, path)).then((doc) => {
+            if (doc.exists()) {
+                console.log("Document data:", doc.data());
+                const data = {
+                    ...doc.data(),
+                    id: doc.id
+                }
+
+                return data
+            } else {
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+            return "Error";
+        });
+    }
+
+    useEffect(() => {
+        if (user && !loading) console.log(user.data());
+        if (!user && !loading) { router.push('/login').then(); }
+    }, [user,loading]);
+
+    const regDate = new Date(user?.data()?.metadata.creationTime as string);
+
     return (
         <>
             <Head>
@@ -31,48 +103,25 @@ export default function Profile() {
                         <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
 
                             <div className="flex flex-row items-center justify-center">
-                                <img className={"rounded-full w-8"} src={user?.photoURL} alt={"Profile Picture"}/>
+                                <img className={"rounded-full w-8"} src={user?.data()?.photoURL} alt={"Profile Picture"}/>
                                 <h6 className="text-2xl font-bold ml-3 text-center">You</h6>
                             </div>
 
-                            <p>Name: {user.displayName}</p>
-                            <p>Email: {user.email}</p>
-                            <p>Email Verified: {user.emailVerified ? "Yes" : "No"}</p>
-                            <p>Phone: {user.phoneNumber ? user.phoneNumber : "No number"}</p>
+                            <p>Name: {user?.data()?.displayName}</p>
+                            <p>Email: {user?.data()?.email}</p>
+                            <p>Email Verified: {user?.data()?.emailVerified ? "Yes" : "No"}</p>
+                            <p>Phone: {user?.data()?.phoneNumber ? user?.data()?.phoneNumber : "No number"}</p>
                             <p>Registered: {regDate.toLocaleString()}</p>
+                            <p>UID: {user?.data()?.uid}</p>
                         </div>
 
                         <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
-                            <h6 className="text-2xl font-bold text-center">Friends</h6>
+                            <h6 className="text-2xl font-bold text-center">Rooms</h6>
                             <div className="grid row-auto col-auto">
-                                {user.friends?.length === 0 && <p>You have no friends...</p>}
-                                {user.friends?.map((friend: React.Key | null | undefined) => (
-                                    <div key={friend} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
-                                        friend
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
-                            <h6 className="text-2xl font-bold text-center">Friend Requests</h6>
-                            <div className="grid row-auto col-auto">
-                                {user.friendRequests?.length === 0 && <p>You have no friend requests...</p>}
-                                {user.friendRequests?.map((request: React.Key | null | undefined) => (
-                                    <div key={request} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
-                                        request
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
-                            <h6 className="text-2xl font-bold text-center">Blocked Users</h6>
-                            <div className="grid row-auto col-auto">
-                                {user.blockedUsers?.length === 0 && <p>You have not blocked anyone...</p>}
-                                {user.blockedUsers?.map((blocked: React.Key | null | undefined) => (
-                                    <div key={blocked} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
-                                        blocked
+                                {resolvedRooms.length === 0 && <p>You have no rooms...</p>}
+                                {resolvedRooms.map((room: any) => (
+                                    <div key={room} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
+                                        <Link href={`/room/${room?.id}`}>{room?.name}</Link>
                                     </div>
                                 ))}
                             </div>
@@ -81,10 +130,10 @@ export default function Profile() {
                         <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
                             <h6 className="text-2xl font-bold text-center">Messages</h6>
                             <div className="grid row-auto col-auto">
-                                {user.messages?.length === 0 && <p>You have no messages...</p>}
-                                {user.messages?.map((message: React.Key | null | undefined) => (
+                                {resolvedMessages.length === 0 && <p>You have no messages...</p>}
+                                {resolvedMessages.map((message: any) => (
                                     <div key={message} className="flex flex-col p-2 m-2 rounded border-violet-600 border shadow-xl">
-                                        message
+                                        {message?.content.toString()}
                                     </div>
                                 ))}
                             </div>
