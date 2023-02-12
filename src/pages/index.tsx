@@ -43,9 +43,7 @@ export default function Home() {
                   </div>
               </div>
               <div className="flex flex-col items-start self-center rounded-xl bg-violet-800 shadow-2xl p-3">
-                <p className={"text-white hover:text-blue-400"}><Link href={"/register"}>Join now!</Link></p>
-                <p className={"text-white hover:text-blue-400"}><Link href={"/login"}>Already have an account?</Link></p>
-                <button className={"bg-purple-600 rounded-md text-white font-sans font-bold mt-2 px-2 py-1"}><Link href={"/chat"}>Development Testing Room</Link></button>
+                <p className={"text-white hover:text-blue-400"}><Link href={"/login"}>Get started now!</Link></p>
               </div>
           </div>
 
