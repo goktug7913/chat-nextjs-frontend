@@ -5,7 +5,7 @@ import {useRouter} from "next/router";
 
 import {auth, firestore} from '@/api/firebase';
 import {useAuthState} from "react-firebase-hooks/auth";
-import {doc, getDoc} from "firebase/firestore";
+import {arrayUnion, doc, getDoc, setDoc} from "firebase/firestore";
 import {useDocument} from "react-firebase-hooks/firestore";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -28,13 +28,38 @@ function Profile() {
     const [resolvedRooms, setResolvedRooms] = React.useState<any[]>([]);
     const [resolvedMessages, setResolvedMessages] = React.useState<any[]>([]);
 
+    // TODO: Dev only.
+    // Add the user to the dev room. This is a temporary solution until the user can create rooms.
+    useEffect(() => {
+        if (user && !loading) {
+            const devRoom = doc(db, "rooms", "wdHlCnVr7No551nfiljL");
+            setDoc(docRef, {
+                rooms: arrayUnion({
+                    path: devRoom.path
+                })
+            }, {merge: true}).then(() => {
+                console.log("Added user to dev room");
+                // Now add the user to the room
+                setDoc(devRoom, {
+                    users: arrayUnion({
+                        path: docRef.path
+                    } as any)
+                }, {merge: true}).then(() => {
+                    console.log("Added dev room to user");
+                });
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, [user, loading]);
+
     useEffect(() => {
         if (user && !loading) {
             setResolvedRooms([]);
             setResolvedMessages([]);
 
             const rooms = user?.data()?.rooms as any[];
-            rooms.forEach((room) => {
+            rooms?.forEach((room) => {
                 const path = room.path;
                 getDoc(doc(db, path)).then((doc) => {
                     if (doc.exists()) {
@@ -53,7 +78,7 @@ function Profile() {
             });
 
             const messages = user?.data()?.messages as any[];
-            messages.forEach((message) => {
+            messages?.forEach((message) => {
                 const path = message.path;
                 getDoc(doc(db, path)).then((doc) => {
                     if (doc.exists()) {
