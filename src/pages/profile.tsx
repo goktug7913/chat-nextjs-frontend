@@ -8,12 +8,17 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {doc, getDoc} from "firebase/firestore";
 import {useDocument} from "react-firebase-hooks/firestore";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Profile() {
     //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
     const router = useRouter();
     const [authUser, authLoading, authError] = useAuthState(auth);
+
+    useEffect(() => {
+        if (!authUser && !authLoading) {
+            router.push('/login').then(r => console.log(r));
+        }
+    }, [authUser, authLoading]);
 
     const db = firestore;
     const docRef = doc(db, "users", authUser?.uid as string);
@@ -62,11 +67,6 @@ export default function Profile() {
         }
     }, [user,loading]);
 
-    useEffect(() => {
-        if (user && !loading) console.log(user.data());
-        if (!user && !loading) { router.push('/login').then(); }
-    }, [user,loading]);
-
     const regDate = new Date(user?.data()?.metadata.creationTime as string);
 
     return (
@@ -84,7 +84,7 @@ export default function Profile() {
                         <div className="flex flex-col p-2 m-2 rounded-xl border-violet-600 border shadow-xl">
 
                             <div className="flex flex-row items-center justify-center">
-                                <Image className={"rounded-full w-8"} src={user?.data()?.photoURL} alt={"Profile Picture"}/>
+                                <img className={"rounded-full w-8"} src={user?.data()?.photoURL} alt={"Profile Picture"}/>
                                 <h6 className="text-2xl font-bold ml-3 text-center">You</h6>
                             </div>
 
