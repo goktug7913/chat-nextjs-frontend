@@ -62,12 +62,12 @@ export default function MessageItem({message}: MessageItemProps) {
                 </div>
             </div>
             :
-            <div className={`text-white flex flex-col flex-shrink rounded-md p-1.5 m-1 max-w-xl transition-all${resolvedSenderName==authUser?.displayName ? " bg-violet-700 ml-80":" bg-violet-900 mr-80"}`}>
-                <div className="flex flex-row flex-shrink items-center justify-between">
+            <div className={`text-white flex flex-col rounded-md py-1.5 px-2 my-0.5 max-w-xl min-w-[15em] transition-all${resolvedSenderName==authUser?.displayName ? " bg-violet-700 justify-self-end":" bg-violet-900 justify-self-start"}`}>
+                <div className="flex flex-row items-center justify-between">
                     <img src={resolvedSender?.photoURL} className="w-10 h-10 rounded-md mr-2 flex flex-shrink" />
 
                     <div className="flex flex-col items-start grow">
-                        <div className="flex flex-row flex-shrink items-center justify-between">
+                        <div className="flex flex-row items-center justify-between">
                             <h6 className="text-sm font-bold">{resolvedSenderName ? resolvedSenderName : "Loading..."}</h6>
                             <span className="text-xs ml-2">{formattedDate}</span>
                         </div>

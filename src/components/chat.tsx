@@ -124,7 +124,7 @@ function Chat( {roomid}: IChatProps ) {
                 </div>
             </div>
 
-            <div className="overflow-y-scroll justify-self-center grid grid-cols-1" ref={msgListDiv}>
+            <div className="overflow-y-scroll justify-self-center grid grid-cols-1 w-8/12" ref={msgListDiv}>
                 {messages?.map((message) => (
                     <MessageItem key={message} message={message} />
                 ))}
