@@ -4,10 +4,11 @@ import {useEffect, useRef, useState} from "react";
 import IMessage from "@/types/IMessage";
 import AppBar from "@/components/AppBar";
 
-import {firestore} from "@/api/firebase";
+import {auth, firestore} from "@/api/firebase";
 import { useDocument} from 'react-firebase-hooks/firestore';
-import {doc} from "firebase/firestore";
+import {doc, setDoc, addDoc, collection, arrayUnion} from "firebase/firestore";
 import dynamic from "next/dynamic";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const DevSvg = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 ml-2 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,8 +21,8 @@ interface IChatProps {
 }
 
 function Chat( {roomid}: IChatProps ) {
+    const [authUser, authLoading, authError] = useAuthState(auth);
     const db = firestore;
-    console.log("Room ID: " + roomid);
     const docRef = doc(db, "rooms", roomid as string);
     const [snapshot, loading, error] = useDocument(docRef);
 
@@ -32,7 +33,7 @@ function Chat( {roomid}: IChatProps ) {
         Owner: "Loading..."
     });
 
-    const [messages, setMessages] = useState([] as IMessage[]);
+    const [messages, setMessages] = useState([] as string[]);
     const msgListDiv = useRef<HTMLDivElement>(null); // Reference to the message list container
 
     useEffect(() => {
@@ -44,6 +45,8 @@ function Chat( {roomid}: IChatProps ) {
             Description: snapshot?.data()?.description,
             Messages: snapshot?.data()?.messages,
         });
+        console.log("Messages: " + snapshot?.data()?.messages);
+        setMessages(snapshot?.data()?.messages);
     }, [snapshot, loading]);
 
     useEffect(() => {
@@ -51,7 +54,35 @@ function Chat( {roomid}: IChatProps ) {
     }, [error]);
 
     const InputMenuCallback = (data: IMessage) => {
-        setMessages([...messages, data]);
+        // Create a new document in the messages collection, add reference to the room and user
+        const newMessage = {
+            sender: doc(db, "users", authUser?.uid as string),
+            content: data.content,
+            createdAt: new Date().getTime(),
+            editedAt: new Date().getTime(),
+            deleted: false,
+        }
+
+        console.log(newMessage);
+
+        const msgCollection = collection(db, "messages");
+        const newMessageRef = addDoc(msgCollection, newMessage).then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+
+            // Add the message to the room
+            const roomRef = doc(db, "rooms", roomid as string);
+            setDoc(roomRef, {
+                messages: arrayUnion(docRef)
+            },{merge: true});
+
+            // Add the message to the user
+            const userRef = doc(db, "users", authUser?.uid as string);
+            setDoc(userRef, {
+                messages: arrayUnion(docRef)
+            },{merge: true});
+        }).catch((error) => {
+            console.error("Error adding document: ", error);
+        });
     }
 
     const scrollToBottom = () => {
@@ -81,7 +112,7 @@ function Chat( {roomid}: IChatProps ) {
 
             <div className="overflow-y-scroll" ref={msgListDiv}>
                 {messages.map((message) => (
-                    <MessageItem key={message.date.toLocaleString()} message={message} />
+                    <MessageItem key={message} message={message} />
                 ))}
             </div>
 

@@ -31,7 +31,7 @@ function ChatInputMenu( {setter, messageList, roomid}: Props ) {
         let data = {
             senderInternalId: user?.data()?.uid,
             sender: user?.data()?.displayName,
-            message: message,
+            content: message,
             date: new Date(),
             isSelf: false,
             room: "test",

@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import Chat from "@/pages/chat";
+import Chat from "@/components/chat";
 
 export default function Room()
 {
