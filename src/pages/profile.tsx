@@ -135,10 +135,10 @@ function Profile() {
                             <div className="grid row-auto col-auto">
                                 {resolvedRooms.length === 0 && <p>You have no rooms...</p>}
                                 {resolvedRooms.map((room: any) => (
-                                    <div key={room} className="flex flex-col text-white">
-                                        <button className={"bg-purple-600 rounded-md px-1 py-1 mr-2"}>
-                                            <Link href={`/room/${room?.id}`}>{room?.name}</Link>
-                                        </button>
+                                    <div key={room} className="grid grid-cols-1 text-white justify-items-stretch">
+                                        <Link href={`/room/${room?.id}`} className={"bg-purple-600 rounded-md p-1"}>
+                                            <button><p>{room?.name}</p></button>
+                                        </Link>
                                     </div>
                                 ))}
                             </div>
