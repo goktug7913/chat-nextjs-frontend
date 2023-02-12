@@ -31,19 +31,22 @@ function Profile() {
     // TODO: Dev only.
     // Add the user to the dev room. This is a temporary solution until the user can create rooms.
     useEffect(() => {
-        if (user && !loading) {
+        if (user && !loading && docRef && db) {
+            // Let's check if the user is already in the dev room
+            const rooms = user?.data()?.rooms as any[];
+            const hasDevRoom = rooms?.find((room) => room.path === "rooms/wdHlCnVr7No551nfiljL");
+            if (hasDevRoom) {
+                console.log("User already in dev room");
+                return;
+            }
             const devRoom = doc(db, "rooms", "wdHlCnVr7No551nfiljL");
             setDoc(docRef, {
-                rooms: arrayUnion({
-                    path: devRoom.path
-                })
+                rooms: arrayUnion(devRoom)
             }, {merge: true}).then(() => {
                 console.log("Added user to dev room");
                 // Now add the user to the room
                 setDoc(devRoom, {
-                    users: arrayUnion({
-                        path: docRef.path
-                    } as any)
+                    users: arrayUnion(docRef)
                 }, {merge: true}).then(() => {
                     console.log("Added dev room to user");
                 });
@@ -51,7 +54,7 @@ function Profile() {
                 console.log(error);
             });
         }
-    }, [user, loading]);
+    }, [user, loading, docRef, db]);
 
     useEffect(() => {
         if (user && !loading) {
@@ -102,7 +105,7 @@ function Profile() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <AppBar />
-            <div className="flex justify-center m-4">
+            <div className="flex justify-center m-4 overflow-y-scroll">
                 <div className="flex flex-col items-center justify-center w-full max-w-screen-xl p-4 bg-white rounded-lg shadow-2xl">
                     <h6 className="text-2xl font-bold">Profile</h6>
 
