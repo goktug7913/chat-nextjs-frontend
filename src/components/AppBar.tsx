@@ -53,10 +53,10 @@ export default function AppBar() {
         if (!rootRef.current) return;
         if (expanded) {
             rootRef.current.style.height = "13.5rem";
-            rootRef.current.classList.add("rounded-b-2xl", "shadow-2xl", "bg-gradient-to-tr", "from-violet-800", "to-purple-400");
+            rootRef.current.classList.add("rounded-b-2xl", "shadow-2xl", "bg-gradient-to-tr", "from-violet-800", "to-purple-400", "mb-2");
         } else {
             rootRef.current.style.height = "3.5rem";
-            rootRef.current.classList.remove("rounded-b-2xl", "shadow-2xl", "bg-gradient-to-tr", "from-violet-800", "to-purple-400");
+            rootRef.current.classList.remove("rounded-b-2xl", "shadow-2xl", "bg-gradient-to-tr", "from-violet-800", "to-purple-400", "mb-2");
             rootRef.current.classList.add("shadow-md", "bg-gradient-to-tr", "from-violet-800", "to-purple-400");
         }
     }, [expanded]);
@@ -81,7 +81,7 @@ export default function AppBar() {
     }, [expanded]);
 
     return (
-        <div className={`flex flex-col flex-shrink-0 bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-1 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
+        <div className={`flex flex-col flex-shrink-0 bg-gradient-to-r from-pink-500 to-purple-600 pb-accent mb-0 transition-all duration-300 ease-in-out overflow-hidden`} ref={rootRef}>
             <div className="bg-indigo-700 px-4 py-2.5 flex flex-row">
                 <button className={"bg-purple-600 rounded-md px-1 py-1 mr-2"} onClick={() => setExpanded(prevState => !prevState)}>
                     {expanded ? <DownArrow /> : <RightArrow />}

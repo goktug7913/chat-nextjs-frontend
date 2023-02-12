@@ -95,21 +95,22 @@ function Chat( {roomid}: IChatProps ) {
         });
     }
 
-    useEffect(scrollToBottom, [messages]);
+    useEffect(scrollToBottom, [messages, msgListDiv, roomid]);
 
     return (
         <>
         <div className="flex flex-col grow shrink max-h-full" id="chat-wrapper">
             <AppBar />
-            <div className={"text-white m-0 p-1 items-center flex flex-row"}>
-                <DevSvg />
-                <h1 className="text-2xl font-bold ml-2">{room.Name}</h1>
-            </div>
+            <div className="flex flex-col flex-shrink bg-gray-600 shadow-xl">
+                <div className={"text-white m-0 p-1 items-center flex flex-row"}>
+                    <DevSvg />
+                    <h1 className="text-2xl font-bold ml-2">{room.Name}</h1>
+                </div>
 
-            <div className={"ml-2"}>
-                <p className="text-white m-0 p-1">{room.Description}</p>
+                <div className={"ml-2"}>
+                    <p className="text-white m-0 p-1">{room.Description}</p>
+                </div>
             </div>
-
             <div className="overflow-y-scroll" ref={msgListDiv}>
                 {messages.map((message) => (
                     <MessageItem key={message} message={message} />
@@ -118,7 +119,7 @@ function Chat( {roomid}: IChatProps ) {
 
             <div className="flex grow shrink"></div>
 
-            <div className="justify-between w-full h-12 self-end">
+            <div className="justify-between w-full h-12 self-end mt-2">
                 <ChatInputMenu setter={InputMenuCallback} messageList={messages} roomid={roomid as string}/>
             </div>
         </div>
