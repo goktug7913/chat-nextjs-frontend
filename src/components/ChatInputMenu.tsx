@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import IMessage from "@/types/IMessage";
 import {useRouter} from "next/router";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -20,7 +20,13 @@ function ChatInputMenu( {setter, messageList, roomid}: Props ) {
     const [authUser, authLoading, authError] = useAuthState(auth);
 
     const db = firestore;
-    const docRef = doc(db, "rooms", roomid);
+    const [docRef, setDocRef] = useState<any>(null);
+
+    useEffect(() => {
+        if (authUser && !authLoading) {
+            setDocRef(doc(db, "rooms", roomid));
+        }
+    }, [authUser, authLoading]);
     const [user, loading, error] = useDocument(docRef);
 
     const HandleSubmit = (e: any) => {

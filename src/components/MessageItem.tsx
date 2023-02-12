@@ -50,17 +50,31 @@ export default function MessageItem({message}: MessageItemProps) {
     }, [hydratedMsg, setFormattedDate]);
 
     return (
-        <div className={`text-white flex flex-col rounded-md p-2 m-2 max-w-xl transition-all${resolvedSenderName==authUser?.displayName ? " bg-violet-700 ml-auto":" bg-violet-900"}`}>
-            <div className="flex flex-row items-center justify-between">
-                <img src={resolvedSender.photoURL} className="w-8 h-8 rounded-md mr-2 flex shrink" />
-                <div className="flex flex-col items-start grow">
-                    <div className="flex flex-row items-center justify-between">
-                        <h6 className="text-sm font-bold">{resolvedSenderName ? resolvedSenderName : "Loading..."}</h6>
-                        <span className="text-xs ml-2">{formattedDate}</span>
+        loading ?
+            <div className={`text-white flex flex-col rounded-md p-2 m-2 max-w-xl transition-all bg-gray-600`}>
+                <div className="flex flex-row items-center justify-between">
+                    <img src={resolvedSender?.photoURL} className="w-8 h-8 rounded-md mr-2 flex shrink" />
+                    <div className="flex flex-col items-start grow">
+                        <div className="flex flex-row items-center justify-between">
+                            <h6 className="text-sm font-bold">{resolvedSenderName ? resolvedSenderName : "Loading..."}</h6>
+                            <span className="text-xs ml-2">...</span>
+                        </div>
+                        <p className="text-sm">{hydratedMsg?.content ? hydratedMsg.content : "Loading..."}</p>
                     </div>
-                    <p className="text-sm">{hydratedMsg?.content ? hydratedMsg.content : "Loading..."}</p>
                 </div>
             </div>
-        </div>
+            :
+            <div className={`text-white flex flex-col rounded-md p-2 m-2 max-w-xl transition-all${resolvedSenderName==authUser?.displayName ? " bg-violet-700 ml-auto":" bg-violet-900"}`}>
+                <div className="flex flex-row items-center justify-between">
+                    <img src={resolvedSender?.photoURL} className="w-8 h-8 rounded-md mr-2 flex shrink" />
+                    <div className="flex flex-col items-start grow">
+                        <div className="flex flex-row items-center justify-between">
+                            <h6 className="text-sm font-bold">{resolvedSenderName ? resolvedSenderName : "Loading..."}</h6>
+                            <span className="text-xs ml-2">{formattedDate}</span>
+                        </div>
+                        <p className="text-sm">{hydratedMsg?.content ? hydratedMsg.content : "Loading..."}</p>
+                    </div>
+                </div>
+            </div>
     )
 }

@@ -11,7 +11,6 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 function Profile() {
-    //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
     const router = useRouter();
     const [authUser, authLoading, authError] = useAuthState(auth);
 
@@ -22,8 +21,14 @@ function Profile() {
     }, [authUser, authLoading]);
 
     const db = firestore;
-    const docRef = doc(db, "users", authUser?.uid as string);
+    const [docRef, setDocRef] = React.useState<any>(null);
     const [user, loading, error] = useDocument(docRef);
+
+    useEffect(() => {
+        if (authUser && !authLoading) {
+            setDocRef(doc(db, "users", authUser?.uid as string));
+        }
+    }, [authUser, authLoading]);
 
     const [resolvedRooms, setResolvedRooms] = React.useState<any[]>([]);
     const [resolvedMessages, setResolvedMessages] = React.useState<any[]>([]);

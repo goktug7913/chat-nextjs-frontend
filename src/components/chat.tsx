@@ -23,7 +23,12 @@ interface IChatProps {
 function Chat( {roomid}: IChatProps ) {
     const [authUser, authLoading, authError] = useAuthState(auth);
     const db = firestore;
-    const docRef = doc(db, "rooms", roomid as string);
+    const [docRef, setDocRef] = useState<any>(null);
+
+    useEffect(() => {
+        if (authLoading) return;
+        setDocRef(doc(db, "rooms", roomid as string));
+    }, [authLoading]);
     const [snapshot, loading, error] = useDocument(docRef);
 
     const [room, setRoom] = useState({
@@ -112,7 +117,7 @@ function Chat( {roomid}: IChatProps ) {
                 </div>
             </div>
             <div className="overflow-y-scroll" ref={msgListDiv}>
-                {messages.map((message) => (
+                {messages?.map((message) => (
                     <MessageItem key={message} message={message} />
                 ))}
             </div>
