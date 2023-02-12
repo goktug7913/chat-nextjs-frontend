@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 
 interface Props {
     setter: (data: IMessage) => void;
-    messageList: IMessage[];
+    messageList: string[];
     roomid: string;
 }
 

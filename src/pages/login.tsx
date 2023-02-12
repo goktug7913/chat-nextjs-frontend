@@ -5,7 +5,7 @@ import AppBar from "@/components/AppBar";
 import { useRouter } from 'next/router';
 
 import {auth} from '@/api/firebase';
-import {useAuthState, useSignInWithGoogle} from "react-firebase-hooks/auth";
+import {useSignInWithGoogle} from "react-firebase-hooks/auth";
 
 export default function Login() {
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
