@@ -5,6 +5,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, firestore} from "@/api/firebase";
 import {useDocument} from "react-firebase-hooks/firestore";
 import {doc} from "firebase/firestore";
+import dynamic from "next/dynamic";
 
 interface Props {
     setter: (data: IMessage) => void;
@@ -12,7 +13,7 @@ interface Props {
     roomid: string;
 }
 
-export default function ChatInputMenu( {setter, messageList, roomid}: Props ) {
+function ChatInputMenu( {setter, messageList, roomid}: Props ) {
     const [message, setMessage] = useState("");
 
     const router = useRouter();
@@ -54,3 +55,10 @@ export default function ChatInputMenu( {setter, messageList, roomid}: Props ) {
         </div>
     );
 }
+
+// export it with SSR disabled
+const ChatInputMenuCSR = dynamic(() => Promise.resolve(ChatInputMenu), {
+    ssr: false,
+})
+
+export default ChatInputMenuCSR

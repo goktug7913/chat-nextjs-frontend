@@ -8,8 +8,9 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {doc, getDoc} from "firebase/firestore";
 import {useDocument} from "react-firebase-hooks/firestore";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
-export default function Profile() {
+function Profile() {
     //const user = useContext(UserContext).user; // TODO: Change this to use the firebase user
     const router = useRouter();
     const [authUser, authLoading, authError] = useAuthState(auth);
@@ -126,3 +127,9 @@ export default function Profile() {
         </>
     )
 }
+// export it with SSR disabled
+const ProfileCSR = dynamic(() => Promise.resolve(Profile), {
+    ssr: false,
+})
+
+export default ProfileCSR

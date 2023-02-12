@@ -7,6 +7,7 @@ import AppBar from "@/components/AppBar";
 import {firestore} from "@/api/firebase";
 import { useDocument} from 'react-firebase-hooks/firestore';
 import {doc} from "firebase/firestore";
+import dynamic from "next/dynamic";
 
 const DevSvg = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 ml-2 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,7 +19,7 @@ interface IChatProps {
     roomid: string | undefined;
 }
 
-export default function Chat( {roomid}: IChatProps ) {
+function Chat( {roomid}: IChatProps ) {
     const db = firestore;
     console.log("Room ID: " + roomid);
     const docRef = doc(db, "rooms", roomid as string);
@@ -91,5 +92,12 @@ export default function Chat( {roomid}: IChatProps ) {
             </div>
         </div>
         </>
-        )
+    )
 }
+
+// export it with SSR disabled
+const ChatCSR = dynamic(() => Promise.resolve(Chat), {
+    ssr: false,
+})
+
+export default ChatCSR
