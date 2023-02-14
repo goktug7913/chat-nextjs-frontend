@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useRouter} from "next/router";
 const deployUrl = "https://chatsv.goktug.xyz/api";
-const devUrl = "http://localhost:3001/api";
+const devUrl = "http://localhost:3001";
 
 const axiosInstance = axios.create({
     baseURL: process.env.NODE_ENV === "production" ? deployUrl : devUrl,
@@ -26,8 +26,8 @@ axiosInstance.interceptors.request.use(
             } else {
                 console.log("User is not logged in");
                 // Redirect the user to login page with NEXT router
-                const router = useRouter();
-                await router.push('/login');
+                //const router = useRouter();
+                //await router.push('/login');
             }
         }
 
